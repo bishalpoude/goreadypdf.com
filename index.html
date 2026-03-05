@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoReadyPDF | Powerful PDF Tools</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .primary-btn { background-color: #2563EB; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; }
+    .primary-btn:hover { background-color: #1E40AF; }
+    .secondary-btn { border: 2px solid #2563EB; color: #2563EB; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; }
+    .secondary-btn:hover { background-color: #EFF6FF; }
+    .card:hover { transform: translateY(-5px); transition: 0.3s; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- ===== Header ===== -->
+  <header class="sticky top-0 bg-white shadow-md z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between p-4">
+      <div class="text-2xl font-bold text-blue-600">GoReadyPDF</div>
+      <nav class="hidden md:flex space-x-6 items-center">
+        <a href="#tools" class="hover:text-blue-600 transition">Tools</a>
+        <a href="#faq" class="hover:text-blue-600 transition">FAQ</a>
+      </nav>
+      <div class="hidden md:flex space-x-4 items-center">
+        <a href="#" class="primary-btn">Sign Up</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Hero Section ===== -->
+  <section class="bg-white py-20 text-center">
+    <div class="max-w-6xl mx-auto px-4">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Powerful PDF Tools for Everyone</h1>
+      <p class="text-gray-600 text-lg md:text-xl mb-8">Merge, Split, Compress PDFs instantly. Fast, secure, and easy to use.</p>
+
+      <div id="drop-area" class="border-2 border-dashed border-gray-300 rounded-xl p-10 bg-gray-50 hover:bg-gray-100 transition cursor-pointer mb-6">
+        <i class="fa-solid fa-file-arrow-up text-4xl text-gray-400 mb-4"></i>
+        <p class="text-gray-500">Drag & drop your PDF files here or click to upload</p>
+      </div>
+
+      <input type="file" id="file-input" multiple accept=".pdf" class="hidden">
+
+      <div class="flex justify-center gap-4 mb-8">
+        <button id="merge-btn" class="primary-btn">Merge PDFs</button>
+        <button id="split-btn" class="primary-btn">Split PDF</button>
+        <button id="compress-btn" class="primary-btn">Compress PDF</button>
+      </div>
+
+      <div id="preview" class="mt-6 space-y-2 max-w-md mx-auto text-left"></div>
+    </div>
+  </section>
+
+  <!-- ===== Tools Info ===== -->
+  <section id="tools" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-12">How it works</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card bg-white shadow-md p-6 rounded-lg">
+          <i class="fa-solid fa-file-import text-4xl text-blue-500 mb-4"></i>
+          <h3 class="font-semibold mb-2">Upload PDF</h3>
+          <p class="text-gray-500">Drag & drop your PDFs or click the area to select files.</p>
+        </div>
+        <div class="card bg-white shadow-md p-6 rounded-lg">
+          <i class="fa-solid fa-arrows-left-right text-4xl text-blue-500 mb-4"></i>
+          <h3 class="font-semibold mb-2">Select Tool</h3>
+          <p class="text-gray-500">Choose Merge, Split, or Compress.</p>
+        </div>
+        <div class="card bg-white shadow-md p-6 rounded-lg">
+          <i class="fa-solid fa-file-circle-check text-4xl text-blue-500 mb-4"></i>
+          <h3 class="font-semibold mb-2">Download</h3>
+          <p class="text-gray-500">Get your processed PDF instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ Section ===== -->
+  <section id="faq" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">FAQs</h2>
+      <div class="space-y-4">
+        <div>
+          <h3 class="font-semibold cursor-pointer faq-title">How do I merge PDF files?</h3>
+          <p class="faq-content hidden text-gray-600 mt-1">Upload your PDFs, click "Merge PDFs", and download the result.</p>
+        </div>
+        <div>
+          <h3 class="font-semibold cursor-pointer faq-title">Is my data safe?</h3>
+          <p class="faq-content hidden text-gray-600 mt-1">Files are processed securely and deleted immediately after processing.</p>
+        </div>
+        <div>
+          <h3 class="font-semibold cursor-pointer faq-title">Can I split or compress PDFs?</h3>
+          <p class="faq-content hidden text-gray-600 mt-1">Yes, just select the respective tool and process your files.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="bg-gray-50 py-12 text-gray-600 text-sm text-center border-t">
+    &copy; 2026 GoReadyPDF. All rights reserved.
+  </footer>
+
+  <!-- ===== JS ===== -->
+  <script>
+    const BASE_URL = "https://goreadypdf-com-3.onrender.com";
+
+    const dropArea = document.getElementById("drop-area");
+    const fileInput = document.getElementById("file-input");
+    const preview = document.getElementById("preview");
+
+    let selectedFiles = [];
+
+    // Drag & Drop & Click
+    dropArea.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", e => { selectedFiles = Array.from(fileInput.files); showPreview(); });
+
+    dropArea.addEventListener("dragover", e => { e.preventDefault(); dropArea.classList.add("bg-gray-100"); });
+    dropArea.addEventListener("dragleave", e => { e.preventDefault(); dropArea.classList.remove("bg-gray-100"); });
+    dropArea.addEventListener("drop", e => {
+      e.preventDefault();
+      dropArea.classList.remove("bg-gray-100");
+      selectedFiles = Array.from(e.dataTransfer.files);
+      showPreview();
+    });
+
+    function showPreview() {
+      preview.innerHTML = "";
+      selectedFiles.forEach(f => {
+        const div = document.createElement("div");
+        div.textContent = `📄 ${f.name} (${(f.size/1024).toFixed(2)} KB)`;
+        div.className = "bg-gray-100 p-2 rounded";
+        preview.appendChild(div);
+      });
+    }
+
+    async function sendToBackend(endpoint) {
+      if (!selectedFiles.length) return alert("Please select PDF files.");
+
+      const formData = new FormData();
+      selectedFiles.forEach(f => formData.append("pdfs", f));
+
+      try {
+        const res = await fetch(`${BASE_URL}/${endpoint}`, { method: "POST", body: formData });
+        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = endpoint + ".pdf";
+        a.click();
+      } catch(err) {
+        console.error(err);
+        alert("Error connecting to backend: " + err.message);
+      }
+    }
+
+    document.getElementById("merge-btn").addEventListener("click", () => sendToBackend("merge"));
+    document.getElementById("split-btn").addEventListener("click", () => sendToBackend("split"));
+    document.getElementById("compress-btn").addEventListener("click", () => sendToBackend("compress"));
+
+    // FAQ toggle
+    document.querySelectorAll(".faq-title").forEach(title => {
+      title.addEventListener("click", () => {
+        const content = title.nextElementSibling;
+        content.classList.toggle("hidden");
+      });
+    });
+  </script>
+</body>
+</html>
