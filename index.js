@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const { PDFDocument } = require("pdf-lib");
 const cors = require("cors");
+const archiver = require("archiver");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -50,7 +51,71 @@ app.post("/merge", upload.array("pdfs"), async (req, res) => {
   }
 });
 
-// ===== TODO: Split & Compress endpoints can be added similarly =====
+// ===== Split PDF =====
+app.post("/split", upload.single("pdfs"), async (req, res) => {
+  let archive;
+  try {
+    if (!req.file)
+      return res.status(400).json({ error: "Select a PDF to split." });
+
+    const pdf = await PDFDocument.load(req.file.buffer);
+    const numberOfPages = pdf.getPageCount();
+
+    archive = archiver("zip", { zlib: { level: 9 } });
+
+    // Handle archive errors
+    archive.on("error", (err) => {
+      throw err;
+    });
+
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader("Content-Disposition", `attachment; filename=split_${req.file.originalname}.zip`);
+    archive.pipe(res);
+
+    for (let i = 0; i < numberOfPages; i++) {
+      const newPdf = await PDFDocument.create();
+      const [copiedPage] = await newPdf.copyPages(pdf, [i]);
+      newPdf.addPage(copiedPage);
+      const pdfBytes = await newPdf.save();
+      archive.append(Buffer.from(pdfBytes), { name: `page_${i + 1}.pdf` });
+    }
+
+    await archive.finalize();
+  } catch (err) {
+    console.error(err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Split exception", details: err.message });
+    } else {
+      // If headers are already sent, we can't send a JSON error.
+      // The stream will just terminate abruptly which is better than nothing.
+      if (archive) archive.abort();
+      res.end();
+    }
+  }
+});
+
+// ===== Compress PDF =====
+app.post("/compress", upload.single("pdfs"), async (req, res) => {
+  try {
+    if (!req.file)
+      return res.status(400).json({ error: "Select a PDF to compress." });
+
+    const pdf = await PDFDocument.load(req.file.buffer);
+
+    // pdf-lib doesn't have advanced compression, but we can re-save with optimizations
+    const compressedPdfFile = await pdf.save({
+      useObjectStreams: true,
+      addDefaultPage: false,
+    });
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename=compressed_${req.file.originalname}`);
+    res.send(Buffer.from(compressedPdfFile));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Compression exception", details: err.message });
+  }
+});
 
 // ===== Start server =====
 app.listen(PORT, () => {
