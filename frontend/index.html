@@ -114,7 +114,7 @@
 
   <!-- ===== JS ===== -->
   <script>
-    const BASE_URL = "https://goreadypdf-com-3.onrender.com";
+    const BASE_URL = window.location.origin;
 
     const dropArea = document.getElementById("drop-area");
     const fileInput = document.getElementById("file-input");
@@ -159,7 +159,7 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = endpoint + ".pdf";
+        const ext = endpoint === "split" ? ".zip" : ".pdf"; a.download = endpoint + ext;
         a.click();
       } catch(err) {
         console.error(err);
